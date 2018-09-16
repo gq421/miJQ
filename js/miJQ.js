@@ -85,7 +85,7 @@ $(function(){
     let button2=$(".box-hd button:first");
     let button3=$(".box-hd button:last");
     let recommend=$(".rec .recommend");
-    let w=recommend.width();
+    let w=recommend.width()/3;
     console.log(w);
     let times = 0;
     button2.click(function(){
@@ -93,14 +93,14 @@ $(function(){
         if (times == 3) {
             times = 2;
         }
-    	recommend.animate({left:'-978px'},"slow")
+    	recommend.css("transform",`translate(${-w*times}px)`);
     })
     button3.click(function(){
     	times--;
         if (times == -1) {
             times = 0;
         }
-    	recommend.animate({left:'0px'},"slow")
+    	recommend.css("transform",`translate(${-w*times}px)`);
     })
     //内容
     let imgs1 =$(".imges");
@@ -108,6 +108,26 @@ $(function(){
     let leftBtn1 = $(".leftBtn:eq(0)");
     let rightBtn1 = $(".rightBtn:eq(1)");
     let widths1 =imgs1.width();
+    bannerLr(imgs1,dots1,leftBtn1,rightBtn1,widths1);
+    let imgs2 = $(".six");
+    let dots2 = $(".dot2");
+    let leftBtn2 = $(".left1:eq(0)");
+    let rightBtn2 = $(".right1:eq(0)");
+    let widths2 = imgs2.width();
+    bannerLr(imgs2,dots2,leftBtn2,rightBtn2,widths2);
+    let imgs3 = $(".sec");
+    let dots3 = $(".dot3");
+    let leftBtn3 = $(".left3:eq(0)");
+    let rightBtn3 = $(".right3:eq(0)");
+    let widths3 = imgs3.width();
+    bannerLr(imgs3,dots3,leftBtn3,rightBtn3,widths3);
+    let imgs4 = $(".four");
+    let dots4 = $(".dot4");
+    let leftBtn4 = $(".left4:eq(0)");
+    let rightBtn4 = $(".right4:eq(0)");
+    let widths4 = imgs4.width();
+    bannerLr(imgs4,dots4,leftBtn4,rightBtn4,widths4);
+    function bannerLr(imgs1,dots1,leftBtn1,rightBtn1,widths1){
     imgs1.eq(0).css({left:0});
     dots1.eq(0).addClass("lie");
     console.log(widths1)
@@ -187,5 +207,80 @@ $(function(){
         }
 
     })
+}
+    //倒计时
+    let spans=document.querySelectorAll(".hour");
+    console.log(spans);
+    setData();
+    setInterval(setData,1000);
+    function setData(){
+        let arr=fn();
+        spans.forEach((v,index)=>{
+            v.innerHTML=arr[index];
+        })
+    }
+    function fn(){
+        //获取现在的时间
+        let now=new Date();
+        //获取放假的时间
+        let future=new Date(2018,9,1);
+        //相差的时间转化为毫秒
+        let time=Math.floor((future.getTime()-now.getTime())/1000);
 
+        let arr=[];
+        let hour=Math.floor(time%(30*24*360)%(24*60*60)/(60*60));
+        // arr.push(hour);
+        if (Math.floor(hour/10)==0){
+            arr.push('0' + hour);
+        } else{
+            arr.push(hour);
+        }
+        let min=Math.floor(time%(30*24*360)%(24*60*60)%(60*60)/60);
+        if (Math.floor(min/10)==0){
+            arr.push('0'+min);
+        } else {
+            arr.push(min);
+        }
+        // arr.push(min);
+        let s=Math.floor(time%(30*24*360)%(24*60*60)%(60*60)%60);
+        // arr.push(s);
+        if (Math.floor(s/10)==0){
+            arr.push('0'+s);
+        } else {
+            arr.push(s);
+        }
+        return arr;
+    }
+    //返回顶部
+    let totop=$('.bar-totop');
+    console.log(totop);
+    totop.click(function(){
+        $(document.body).animate({scrollTop:0});
+        $(document.documentElement).animate({scrollTop:0});
+    })
+    console.log(totop);
+    window.onscroll=function () {
+        let h=document.body.scrollTop||document.documentElement.scrollTop;
+        if (h>1000){
+            totop.css("display","block");
+        } else {
+            totop.css("display","none");
+        }
+    }
+
+    let pop=$(".bar-pop");
+    let sor=$(".bar-sor");
+    for (let i = 0; i < sor.length; i++) {
+        //鼠标移入
+        sor[i].onmouseover = function () {
+            for (let j = 0; j < sor.length; j++) {
+                pop[j].style.display = "none";
+            }
+            pop[i].style.display = "block";
+        }
+        sor[i].onmouseout=function () {
+            pop[i].style.display="none";
+        }
+    }
+    console.log(sor);
 })
